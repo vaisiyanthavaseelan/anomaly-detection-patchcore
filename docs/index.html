@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automatische Fehlererkennung für Metallbauteile</title>
+<meta name="description" content="KI-System zur automatischen Erkennung von Defekten an Metallbauteilen, trainiert ausschließlich auf fehlerfreien Beispielen.">
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --text: #1a1d23;
+    --text-muted: #5b6472;
+    --border: #e4e7ec;
+    --accent: #1d5fd6;
+    --accent-soft: #eaf0fd;
+    --good: #1a8f5e;
+    --bad: #c0392b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a;
+      --surface: #1c1f26;
+      --text: #eef0f3;
+      --text-muted: #a2a9b5;
+      --border: #2c303a;
+      --accent: #6f9bff;
+      --accent-soft: #202844;
+      --good: #4fce9a;
+      --bad: #ff6b5e;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  header.hero {
+    padding: 72px 0 40px;
+    text-align: center;
+  }
+  header.hero .eyebrow {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: clamp(28px, 4.5vw, 42px);
+    line-height: 1.15;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .hero-image {
+    margin: 48px 0;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 50px -25px rgba(0,0,0,0.35);
+  }
+  .hero-image img { display: block; width: 100%; height: auto; }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+    margin: 0 0 56px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+  .stat-card .value {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .stat-card .label {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+  section { margin-bottom: 56px; }
+  h2 {
+    font-size: 22px;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .step .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+  .step h3 { font-size: 16px; margin: 0 0 8px; }
+  .step p { font-size: 14.5px; color: var(--text-muted); margin: 0; }
+  p.lead { font-size: 16px; color: var(--text-muted); }
+  .verdict-example {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-top: 20px;
+    font-size: 14.5px;
+  }
+  .verdict-example .badge {
+    font-weight: 700;
+    font-size: 12.5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .badge.ok { background: color-mix(in srgb, var(--good) 15%, transparent); color: var(--good); }
+  .badge.bad { background: color-mix(in srgb, var(--bad) 15%, transparent); color: var(--bad); }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 13.5px;
+    color: var(--text-muted);
+  }
+  .cta {
+    text-align: center;
+    padding: 48px 0 72px;
+    border-top: 1px solid var(--border);
+  }
+  .cta p { color: var(--text-muted); margin-bottom: 20px; }
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 13px 26px;
+    border-radius: 10px;
+  }
+  .button:hover { opacity: 0.9; }
+  footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    padding-bottom: 40px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <span class="eyebrow">Computer-Vision-Projekt</span>
+      <h1>Defekte an Metallbauteilen automatisch erkennen — ohne ein einziges defektes Trainingsbild</h1>
+      <p class="subtitle">
+        Ein KI-System, das lernt, wie ein fehlerfreies Bauteil aussieht, und
+        jede Abweichung davon selbstständig als Anomalie markiert. Getestet
+        an Metallmuttern und Schrauben — Bauteiltypen, wie sie in der
+        Präzisionsfertigung millionenfach verbaut werden.
+      </p>
+    </header>
+
+    <div class="hero-image">
+      <img src="assets/hero.png" alt="Beispielergebnisse: Original-Bauteil neben automatisch erzeugter Heatmap mit erkanntem Defekt, für Metallmutter und Schraube">
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="value">100%</div>
+        <div class="label">Testbilder Metallmutter korrekt klassifiziert</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">96%</div>
+        <div class="label">Testbilder Schraube korrekt klassifiziert</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">0</div>
+        <div class="label">Defektbilder im Training benötigt</div>
+      </div>
+    </div>
+
+    <section>
+      <h2>Wie funktioniert das?</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>Nur "gute" Bauteile zeigen</h3>
+          <p>Das System bekommt ausschließlich Fotos von einwandfreien Bauteilen zu sehen — Fehlerbilder sind in der Praxis selten und teuer zu sammeln, hier braucht es keine.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>KI lernt "normal"</h3>
+          <p>Ein vortrainiertes Bilderkennungsmodell extrahiert charakteristische Merkmale aus tausenden Bildausschnitten und speichert sie als Referenz.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>Abweichungen markieren</h3>
+          <p>Bei einem neuen Bauteil-Foto vergleicht das System jeden Bildausschnitt mit der Referenz. Große Abweichung = Defekt, inklusive Heatmap, die zeigt wo genau.</p>
+        </div>
+      </div>
+
+      <div class="verdict-example">
+        <span class="badge bad">DEFEKT ERKANNT</span>
+        <span>Verbogene Metallmutter — Score deutlich über dem gelernten Normalbereich</span>
+      </div>
+      <div class="verdict-example">
+        <span class="badge ok">OK</span>
+        <span>Fehlerfreie Schraube — Score im gelernten Normalbereich, kein Alarm</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Warum das relevant ist</h2>
+      <p class="lead">
+        Klassische Qualitätsprüfung mit KI braucht meist große Mengen an
+        gelabelten Fehlerbildern — die in der Produktion oft schlicht nicht
+        in ausreichender Zahl vorliegen, weil gute Fertigung selten Ausschuss
+        produziert. Der hier verwendete Ansatz (PatchCore, veröffentlicht
+        2022) umgeht das: Er lernt ausschließlich aus Gutteilen und
+        erreicht trotzdem Genauigkeiten auf Höhe des wissenschaftlichen
+        State of the Art. Das macht ihn direkt einsetzbar für neue
+        Bauteiltypen, ohne dass vorher erst Ausschuss gesammelt werden muss.
+      </p>
+    </section>
+
+    <section>
+      <h2>Umsetzung</h2>
+      <p class="lead">Nicht nur ein Notebook — ein lauffähiger Service:</p>
+      <div class="stack">
+        <span class="pill">Python</span>
+        <span class="pill">PyTorch</span>
+        <span class="pill">WideResNet-50</span>
+        <span class="pill">FAISS (Ähnlichkeitssuche)</span>
+        <span class="pill">FastAPI</span>
+        <span class="pill">Docker</span>
+        <span class="pill">MVTec-AD Datensatz</span>
+      </div>
+    </section>
+
+    <div class="cta">
+      <p>Vollständiger Code, Architektur-Details und technische Doku im GitHub-Repository.</p>
+      <a class="button" href="https://github.com/vaisiyanthavaseelan/anomaly-detection-patchcore">Code auf GitHub ansehen →</a>
+    </div>
+
+    <footer>anomaly-detection-patchcore — Portfolio-Projekt</footer>
+  </div>
+</body>
+</html>
