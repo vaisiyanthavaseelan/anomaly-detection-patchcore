@@ -1,0 +1,19 @@
+{
+  "category": "metal_nut",
+  "backbone": "wide_resnet50_2",
+  "layers": [
+    "layer2",
+    "layer3"
+  ],
+  "image_size": 256,
+  "crop_size": 224,
+  "pool_kernel": 3,
+  "coreset_ratio": 0.01,
+  "projection_dim": 128,
+  "num_neighbors": 1,
+  "reweight_k": 9,
+  "feature_map_size": [
+    28,
+    28
+  ]
+}
