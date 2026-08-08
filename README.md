@@ -1,4 +1,33 @@
-# Anomaly Detection mit PatchCore (MVTec-AD: metal_nut, screw)
+# Automatische Fehlererkennung fuer Metallbauteile (KI-gestuetzt)
+
+Ein KI-System, das Kratzer, Verformungen und andere Defekte an Metallbauteilen
+automatisch erkennt -- **ohne dass ihm jemals ein defektes Bauteil gezeigt
+wurde**. Es lernt nur, wie "gut" aussieht, und schlaegt bei jeder Abweichung
+Alarm. Trainiert und getestet an zwei Bauteilarten, die in der
+Praezisionsfertigung (z. B. Triebwerksmontage) typisch sind: Metallmuttern
+und Schrauben.
+
+![Beispielergebnisse: automatisch erkannte Defekte an Metallmutter und Schraube](assets/hero.png)
+
+## Ergebnisse auf einen Blick
+
+| Bauteil | Fehler korrekt erkannt | Trainiert mit |
+|---|---|---|
+| Metallmutter | **100 %** der Testbilder korrekt klassifiziert | nur 220 fehlerfreie Bilder |
+| Schraube | **96 %** der Testbilder korrekt klassifiziert | nur 320 fehlerfreie Bilder |
+
+Zum Einordnen: Die zugrunde liegende Methode (PatchCore, Roth et al. 2022)
+erreicht in der wissenschaftlichen Originalarbeit im Schnitt ca. 99 % ueber
+15 verschiedene Bauteilarten -- die Ergebnisse hier liegen also im
+State-of-the-Art-Bereich.
+
+**Fertig nutzbar**: Das trainierte System ist als REST-API verpackt (per
+Docker startbar) -- ein Foto hochladen, in unter einer Sekunde Antwort:
+defekt oder nicht, plus Heatmap, die zeigt *wo*.
+
+---
+
+## Technischer Hintergrund
 
 Bildbasierte Anomalieerkennung fuer Metallbauteile ohne Trainings-Labels fuer
 Defekte: Ein Modell lernt ausschliesslich aus fehlerfreien Bauteilbildern und
