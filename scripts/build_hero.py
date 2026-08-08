@@ -20,8 +20,8 @@ from src.patchcore import PatchCore
 from src.visualize import denormalize
 
 EXAMPLES = [
-    {"category": "metal_nut", "defect_type": "bent", "index_in_type": 0, "label_de": "Metallmutter — verbogen"},
-    {"category": "screw", "defect_type": "scratch_neck", "index_in_type": 0, "label_de": "Schraube — Kratzer"},
+    {"category": "metal_nut", "defect_type": "bent", "index_in_type": 0, "label_de": "Metallmutter: verbogen"},
+    {"category": "screw", "defect_type": "scratch_neck", "index_in_type": 0, "label_de": "Schraube: Kratzer"},
 ]
 
 
