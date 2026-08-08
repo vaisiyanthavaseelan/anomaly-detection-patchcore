@@ -165,6 +165,34 @@
     font-size: 13.5px;
     color: var(--text-muted);
   }
+  .match-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .match-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+  }
+  .match-card .req {
+    font-size: 12.5px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .match-card .impl {
+    font-size: 14.5px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .match-card .impl .check {
+    color: var(--good);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
   .cta {
     text-align: center;
     padding: 48px 0 72px;
@@ -269,15 +297,62 @@
     </section>
 
     <section>
+      <h2>Abgleich mit der Stellenanzeige</h2>
+      <p class="lead">
+        Bewusst als Vorbereitung auf die Ausschreibung
+        „Praktikum Digitalisierung für Machine Learning" bei MTU Maintenance
+        Berlin-Brandenburg umgesetzt — jeder zentrale Punkt aus dem
+        Anforderungsprofil taucht im Projekt konkret auf, nicht nur als
+        Buzzword:
+      </p>
+      <div class="match-grid">
+        <div class="match-card">
+          <div class="req">„Entwicklung, Implementierung und Optimierung von Machine-Learning-Modellen auf PoC-Level"</div>
+          <div class="impl"><span class="check">✓</span><span>PatchCore komplett selbst implementiert (Feature-Extraktion, Memory Bank, Scoring) statt Fertig-Library — inklusive gezielter Optimierung der Hyperparameter.</span></div>
+        </div>
+        <div class="match-card">
+          <div class="req">„Skalierung von ML-Modellen für produktive Systeme unter Beachtung von Performance und Sicherheit"</div>
+          <div class="impl"><span class="check">✓</span><span>Coreset-Subsampling reduziert die Vektor-Datenbank um über 99 % bei kaum messbarem Genauigkeitsverlust — Tradeoff bewusst gewählt, gemessen und dokumentiert.</span></div>
+        </div>
+        <div class="match-card">
+          <div class="req">„Aufbau, Testing und Verwaltung von Datenpipelines für Trainings- und Produktionssysteme"</div>
+          <div class="impl"><span class="check">✓</span><span>Eigener Dataset-Loader, Vorbereitungsskript für Rohdaten, automatisierter End-to-End-Pipelinetest mit synthetischen Daten (läuft ohne echten Datensatz durch).</span></div>
+        </div>
+        <div class="match-card">
+          <div class="req">„Datenqualitätssicherung sowie Feature Engineering"</div>
+          <div class="impl"><span class="check">✓</span><span>Multi-Layer-Feature-Fusion, lokal gemittelte Patch-Features, korrekte Normalisierung — jeder Schritt bewusst begründet, nicht Standardwerte übernommen.</span></div>
+        </div>
+        <div class="match-card">
+          <div class="req">„Recherche, Evaluierung und Auswahl geeigneter Machine-Learning-Algorithmen"</div>
+          <div class="impl"><span class="check">✓</span><span>Bewusste Wahl von PatchCore, weil es ganz ohne Defektbeispiele auskommt; Ergebnisse gegen wissenschaftliche Referenzwerte benchmarkt statt nur "es läuft".</span></div>
+        </div>
+        <div class="match-card">
+          <div class="req">„Erste Erfahrung in der Entwicklung von APIs und der Integration von ML-Modellen in produktive Umgebungen"</div>
+          <div class="impl"><span class="check">✓</span><span>REST-API mit FastAPI, containerisiert mit Docker — ein Foto hochladen, Ergebnis in unter einer Sekunde.</span></div>
+        </div>
+        <div class="match-card">
+          <div class="req">„Erfahrung ... vorzugsweise in Computer Vision Projekten", „Erfahrung mit PyTorch und Scikit-learn"</div>
+          <div class="impl"><span class="check">✓</span><span>Durchgängiges Computer-Vision-Projekt: PyTorch fürs Deep-Learning-Backbone, scikit-learn für die Auswertungsmetriken.</span></div>
+        </div>
+        <div class="match-card">
+          <div class="req">„Dokumentation und Präsentation von Modellen"</div>
+          <div class="impl"><span class="check">✓</span><span>Ausführliches README mit Architektur-Erklärung, plus diese eigenständige Projektseite für nicht-technische Leser:innen.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
       <h2>Umsetzung</h2>
       <p class="lead">Nicht nur ein Notebook — ein lauffähiger Service:</p>
       <div class="stack">
         <span class="pill">Python</span>
         <span class="pill">PyTorch</span>
         <span class="pill">WideResNet-50</span>
+        <span class="pill">scikit-learn</span>
         <span class="pill">FAISS (Ähnlichkeitssuche)</span>
         <span class="pill">FastAPI</span>
         <span class="pill">Docker</span>
+        <span class="pill">GitHub</span>
         <span class="pill">MVTec-AD Datensatz</span>
       </div>
     </section>
